@@ -1,3 +1,5 @@
+import os
+
 from langchain_core.prompts import ChatPromptTemplate
 
 from eilaaj import config
@@ -10,6 +12,14 @@ from eilaaj.vector_store import (
     vector_store_exists,
     get_retriever,
 )
+
+
+def _friendly_source_name(source_path: str) -> str:
+    """Turn a file path like 'data/boericke_materia_medica.pdf' into 'Boericke Materia Medica'."""
+    if not source_path:
+        return "Unknown source"
+    base = os.path.splitext(os.path.basename(source_path))[0]
+    return base.replace("_", " ").replace("-", " ").title()
 
 
 def build_vector_store_for_data(data_path: str = config.DATA_PATH):
@@ -74,11 +84,16 @@ def query_rag(query_text: str, history: list = None) -> str:
 
     retriever = get_retriever(vector_store)
     results = retriever.invoke(query_text)
-    context_text = (
-        "\n\n---\n\n".join(doc.page_content for doc in results)
-        if results
-        else "No specific context found in the knowledge base."
-    )
+
+    if results:
+        blocks = []
+        for doc in results:
+            source_path = doc.metadata.get("source", "")
+            source_name = _friendly_source_name(source_path)
+            blocks.append(f"[Source: {source_name}]\n{doc.page_content}")
+        context_text = "\n\n---\n\n".join(blocks)
+    else:
+        context_text = "No specific context found in the knowledge base."
 
     prompt = ChatPromptTemplate.from_template(template).format(
         context=context_text, question=query_text, history=history_text

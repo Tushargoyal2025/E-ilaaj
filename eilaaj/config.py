@@ -23,7 +23,7 @@ CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
 
 # ==================== RETRIEVAL ====================
-TOP_K_RESULTS = 3
+TOP_K_RESULTS = 6  # bumped up since multiple reference books means more candidate chunks to consider
 
 # ==================== PROMPT ====================
 SYSTEM_PROMPT_TEMPLATE = """
@@ -44,13 +44,18 @@ Strict reply rules:
 - Only mention specific remedies once you have enough case details across
   several of these angles. Until then, just ask the next clarifying
   question.
-- Use the retrieved context from Kent's Repertory naturally in your own words —
-  never paste raw comma-separated rubric lists.
+- Use the retrieved context naturally in your own words — never paste raw
+  comma-separated rubric lists.
+- If multiple source books agree on a remedy, that agreement strengthens
+  the case for it — you can mention this naturally (e.g. "both the
+  repertory and materia medica point to..."). If sources disagree or
+  emphasize different remedies, prefer the one with more specific,
+  matching detail for this case.
 
 Conversation so far (most recent last):
 {history}
 
-Context retrieved from Kent's Repertory:
+Context retrieved from the reference books (each block is tagged with its source):
 {context}
 
 ---
@@ -74,11 +79,17 @@ report, using exactly these four headings (as markdown, in this order):
 
 ## Indicated Remedies
 List 2-3 remedies from the retrieved context that fit this case, ranked
-best-fit first. For each, give: the remedy name, one short sentence on why
-it matches this case, and the commonly available potency with a standard
-OTC-style dosing note (e.g. "30C — 3 to 5 pellets, 2-3 times daily until
-symptoms ease, then stop"). Use standard, widely-available potencies only —
-do not invent specific milligram doses or prescription-strength claims.
+best-fit first. Cross-reference across the tagged sources: use the
+repertory-style sources to confirm which remedies match the rubric/symptom
+pattern, and use materia medica-style sources (drug pictures, clinical
+notes) to refine the differentiation and dosing. For each remedy, give:
+the name, one short sentence on why it matches this case (citing which
+kind of source supports it, e.g. "per the repertory's rubric..." or "per
+the materia medica's drug picture..."), and the commonly available potency
+with a standard OTC-style dosing note (e.g. "30C — 3 to 5 pellets, 2-3
+times daily until symptoms ease, then stop"). Use standard, widely-available
+potencies only — do not invent specific milligram doses or
+prescription-strength claims.
 
 ## Daily Routine
 2-3 short, practical bullet points.
@@ -89,7 +100,7 @@ do not invent specific milligram doses or prescription-strength claims.
 Conversation so far (most recent last):
 {history}
 
-Context retrieved from Kent's Repertory:
+Context retrieved from the reference books (each block is tagged with its source):
 {context}
 
 ---
