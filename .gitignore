@@ -4,18 +4,20 @@ __pycache__/
 *$py.class
 *.so
 .Python
+
+# Build / packaging
 build/
 dist/
 *.egg-info/
 .eggs/
 
-# Virtual environments
+# ==================== Virtual Environments ====================
 .venv/
 venv/
 env/
 ENV/
 
-# ==================== Secrets / env ====================
+# ==================== Secrets / Environment ====================
 .env
 .env.*
 !.env.example
@@ -26,13 +28,17 @@ ENV/
 *.sqlite3
 user.db
 
-# ==================== Vector store / ingested data ====================
-chroma_db/
-data/*
-!data/.gitkeep
+# ==================== Vector Store / Ingested Data ====================
+data/dictionaryofdome00clar.pdf
+data/kents_reporty.pdf
+data/Pocket-Manual-Of-Homoeopathy.pdf
 
-# (Uncomment if you don't want to commit large source PDFs)
-# *.pdf
+chroma_db/
+
+# ==================== PDFs ====================
+# Ignore PDFs inside data/ so large source PDFs
+# are not accidentally committed
+data/*.pdf
 
 # ==================== Logs ====================
 *.log
@@ -41,18 +47,34 @@ ocr_work/
 # ==================== OS ====================
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# ==================== Editors ====================
+# ==================== Editors / IDEs ====================
 .vscode/
 .idea/
 *.swp
+*.swo
 
-# ==================== Node (if any frontend tooling is added later) ====================
+# ==================== Node.js ====================
 node_modules/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==================== Testing / Cache ====================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # ==================== Misc ====================
 *.zip
-__pycache__/
-.pytest_cache/
-.mypy_cache/
+*.tar
+*.tar.gz
+*.rar
+
+# Temporary files
+*.tmp
+*.temp
