@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 
 from database import (
     ChatMessageSchema,
@@ -8,7 +9,6 @@ from database import (
 )
 from deps import get_current_user_email
 from eilaaj.pipeline import query_rag
-
 router = APIRouter(prefix="/chat", tags=["chat"])
 
 
