@@ -15,7 +15,7 @@ PERSIST_DIRECTORY = os.path.join("chroma_db")
 
 # ==================== MODELS ====================
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
-LLM_MODEL_NAME = "llama-3.3-70b-versatile"
+LLM_MODEL_NAME = "openai/gpt-oss-120b"
 LLM_TEMPERATURE = 0.5
 
 # ==================== CHUNKING ====================
